@@ -1,10 +1,19 @@
 "use strict"
 
+let numberOfFilms;
 
-let numberOfFilms = prompt('Сколько фильмов посмотрели', '');
+function start() {
+    numberOfFilms = +prompt('Сколько фильмов посмотрели', '');
+
+    while (numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms)){
+        numberOfFilms = +prompt('Сколько фильмов посмотрели', '');
+    }
+}
+
+start();
 
 let personalMovieDB = {
-    count : +numberOfFilms,
+    count : numberOfFilms,
     movies: {},
     actors: {},
     genres: [],
@@ -13,36 +22,55 @@ let personalMovieDB = {
 
 let films = [];
 let evaluation = [];
-for (let i = 0; i < 2; i++)
-{
-    films[i] = prompt('Какой последний фильм посмотрели?', '');
-    while(films[i] == null || films[i].length > 50 || films[i] == '')
-    {
+
+function rememberMyFilms(){
+    for (let i = 0; i < 2; i++) {
         films[i] = prompt('Какой последний фильм посмотрели?', '');
+        while (films[i] == null || films[i].length > 50 || films[i] == '') {
+            films[i] = prompt('Какой последний фильм посмотрели?', '');
+        }
+        do {
+            evaluation[i] = prompt('Какую оценку поставите?', '');
+        }
+        while (evaluation[i] == null || evaluation[i].length > 50 || evaluation[i] == '')
+        personalMovieDB.movies[films[i]] = evaluation[i];
     }
-    do {
-        evaluation[i] = prompt('Какую оценку поставите?', '');
-       }
-    while(evaluation[i] == null || evaluation[i].length > 50 || evaluation[i] == '')
-    personalMovieDB.movies[films[i]] = evaluation[i];
 }
 
-if (personalMovieDB.count < 10)
-{
-    console.log('Просмотрено довольно мало фильмов');
+rememberMyFilms();
+
+function detectPersonalLevel() {
+    if (personalMovieDB.count < 10) {
+        console.log('Просмотрено довольно мало фильмов');
+    } else if (personalMovieDB.count >= 10 && personalMovieDB.count <= 30) {
+        console.log('Вы классчиеский зритель');
+    } else if (personalMovieDB.count > 30) {
+        console.log('Вы киноман');
+    } else {
+        console.log('Произошла ошибка');
+    }
 }
-else if (personalMovieDB.count >= 10 && personalMovieDB.count <= 30)
+
+detectPersonalLevel();
+
+function showMyDB()
 {
-    console.log('Вы классчиеский зритель');
+    if(personalMovieDB.privat === false)
+    {
+        console.log(personalMovieDB);
+    }
 }
-else if (personalMovieDB.count > 30)
+
+function writeYourGenres()
 {
-    console.log('Вы киноман');
+    for (let i = 0; i < 3; i++)
+    {
+        personalMovieDB.genres[i] = prompt(`Ваш любимый жанр под номером ${i+1} ?`,'')
+    }
 }
-else
-{
-    console.log('Произошла ошибка');
-}
+
+writeYourGenres();
+showMyDB();
 
 console.log(personalMovieDB.movies);
 
